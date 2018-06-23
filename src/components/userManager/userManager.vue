@@ -109,31 +109,6 @@
 		<!--编辑用户详细信息-->
 		<el-dialog :visible.sync="editDialog" :center="true">
 		  <dl class="audit">
-		  	<!-- <div class="clearfix">
-				<dt class="pull-left">用户名：</dt>
-				<dd class="pull-left"><el-input v-model.trim="editUserName" placeholder="请输入用户名"></el-input></dd>
-			</div>
-			<div class="clearfix">
-				<dt class="pull-left">身份：</dt>
-				<dd class="pull-left">
-					<el-select v-model="editIdentityVal" placeholder="请选择" style="width:100%;">
-					    <el-option
-					      v-for="item in identity"
-					      :key="item.value"
-					      :label="item.text"
-					      :value="item.value">
-					    </el-option>
-					</el-select>
-				</dd>
-			</div> -->
-			<!-- <div class="clearfix">
-				<dt class="pull-left">手机号：</dt>
-				<dd class="pull-left"><el-input v-model.trim="editPhone" placeholder="请输入手机号"></el-input></dd>
-			</div>
-			<div class="clearfix">
-				<dt class="pull-left">密码：</dt>
-				<dd class="pull-left"><el-input v-model.trim="editPassword" type="password" placeholder="请输入密码"></el-input></dd>
-			</div> -->
 			<div class="clearfix">
 				<dt class="pull-left">消费等级：</dt>
 				<dd class="pull-left">
@@ -266,10 +241,6 @@
 				],
 				editConsumerLevel: '',
 				editCreditLevel: ''
-				// editUserName: '',
-				// editIdentityVal: '',
-				// editPhone: '',
-				// editPassword: ''
 			}
 		},
 		methods: {
@@ -373,42 +344,9 @@
 				this.editConsumerLevel = row['consumerLevel']
 				this.editCreditLevel = row['creditLevel']
 				this.editDialog = true;
-				// this.$ajax(this, {
-				// 	url: '/getUserInfo',
-				// 	data: {
-				// 		userId: row['userId']
-				// 	}
-				// }, 
-				// (result) => {
-				// 	let res = result['data']
-				// 	this.editUserName = res['userName'];
-				// 	this.editIdentityVal = res['identity'];
-				// 	this.editPhone = res['phoneNumber'];
-				// 	this.editPassword = res['password'];
-				// });
 			},
 			//更新用户信息
 			editDialogOk () {
-				// if (isEmpty(this.editUserName)) {
-				// 	return this.$notify.error({
-			    //       message: '请输入用户名'
-			    //     });
-				// }
-				// if (isEmpty(this.editIdentityVal)) {
-				// 	return this.$notify.error({
-			    //       message: '请选择身份'
-			    //     });
-				// }
-				// if (isEmpty(this.editPhone)) {
-				// 	return this.$notify.error({
-			    //       message: '请输入手机号码'
-			    //     });
-				// }
-				// if (!phoneValidate(this.editPhone)) {
-				// 	return this.$notify.error({
-			    //       message: '请输入正确格式的手机号码'
-			    //     });
-				// }
 				if (isEmpty(this.editConsumerLevel)) {
 					return this.$notify.error({
 			          message: '请选择消费等级'
@@ -422,10 +360,6 @@
 				this.$ajax(this, {
 					url: '/FlightDeliveryServer/usermanagement/updateuseropt',
 					data: {
-						// userName: this.editUserName,
-						// identity: this.editIdentityVal,
-						// phoneNumber: this.editPhone,
-						// password: this.editPassword
 						userId: this.editUserInfo['userId'],
 						consumerLevel: this.editConsumerLevel-0,
 						creditLevel: this.editCreditLevel-0,
