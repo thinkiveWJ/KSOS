@@ -36,9 +36,6 @@
 			          message: '请输入密码'
 			        });
 				}
-				// var password = crypto.createHash("md5")
-				// 					.update(this.password)
-				// 					.digest('hex');
 				this.$ajax(this, {
 					url: '/FlightDeliveryServer/usermanagement/rootlogin',
 					data: {
