@@ -1,0 +1,50 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,
+body{
+	font-size: 14px;
+	color: #333;
+	font-family: "微软雅黑", "Heiti SC", "sans-serif", arial;
+	width: 100%;
+	height: 100%;
+}
+ol,
+ul{
+    list-style: none;
+}
+/*不能被选中*/
+.no-select{
+    -webkit-user-select:none; /*chrome4.0+ Safari4.0+ Opera6.0+ iOS Safari15.0+ Android Browser6.0+ Android Chrome18.0*/
+    -moz-user-select:none; /*forefix4.0+*/
+    -ms-user-select:none; /*IE10+*/
+    user-select:none;
+}
+a{
+	color: #333;
+	cursor: pointer;
+}
+a:hover{
+	text-decoration: none;
+	color: #333;
+}
+.bs-btn{
+	padding: 6px 13px;
+	border-radius: 3px;
+	color: #fff;
+	background: #69c72b;
+	cursor: pointer;
+	display: inline-block;
+}
+.bs-btn:hover{
+	background: #69c00b;
+	color: #fff;
+}
+.header{
+	margin-bottom: 24px;
+}
+.pagers{
+	margin: 15px;
+	text-align: right;
+}
