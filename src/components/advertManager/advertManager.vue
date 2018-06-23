@@ -11,7 +11,6 @@
 				</el-row>
 			</div>
 		</div>
-		<!--<div>12334sd</div>-->
 		<el-table :data="tableData" style="width: 100%" :stripe="true" :border="true" 
 			v-loading="loading"
 			element-loading-text="拼命加载中"
