@@ -18,9 +18,9 @@
     		element-loading-spinner="el-icon-loading"
     		element-loading-background="rgba(0, 0, 0, 0.6)">
 	    	<el-table-column prop="msgId" label="ID" align="center"></el-table-column>
-		    <el-table-column prop="msgTitle" label="标题" align="center"></el-table-column>
-		    <el-table-column prop="msgContent" label="内容" align="center"></el-table-column>
-		    <el-table-column prop="msgType" label="类型" align="center"></el-table-column>
+		    <el-table-column prop="title" label="标题" align="center"></el-table-column>
+		    <el-table-column prop="content" label="内容" align="center"></el-table-column>
+		    <el-table-column prop="type" label="类型" align="center"></el-table-column>
 		    <el-table-column prop="msgObj" label="接收对象" align="center"></el-table-column>
 		    <el-table-column prop="msgCreateDate" label="创建时间" align="center"></el-table-column>
 		    <el-table-column prop="msgStartDate" label="生效开始时间" align="center"></el-table-column>
@@ -40,7 +40,7 @@
 		      :current-page="currentPage"
 		      :page-size="20"
 		      layout="total, prev, pager, next, jumper"
-		      :total="400"
+		      :total="total"
 		      prev-text="上一页"
 		      next-text="下一页">
 		    </el-pagination>
@@ -101,6 +101,7 @@
 				tableData: [],
 				loading: true,
 				currentPage: 1,
+				total: 0,
 				//编辑
 				editDialog: false,
 				editMsgTypeValue: '',
@@ -122,7 +123,9 @@
 		created () {
 //			查询所有消息
 			let data = {
-				
+				pageNo: 1,
+				sizePerPage: 20,
+				startDate: 0
 			};
 			this.getMsgList(data);
 		},
@@ -131,18 +134,21 @@
 			queryFunc () {
 				//			查询所有消息
 				let data = {
-					
+					pageNo: 1,
+					sizePerPage: 20
 				};
 				this.getMsgList(data);
 			},
 			//			查询所有消息
 			getMsgList (dataParams) {
 				this.$ajax(this, {
-					url: '/getMsgList',
+					url: '/FlightDeliveryServer/messagemanagement/getmsglist',
 					data: dataParams
 				},
 				(result) => {
-					this.tableData = result['list']
+					this.tableData = result['data']['publicMsgList']
+					this.currentPage = result['data']['tablePageDto']['pageNo']
+					this.total = result['data']['tablePageDto']['total'];
 				});
 			},
 			//翻页

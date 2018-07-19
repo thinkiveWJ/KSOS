@@ -134,6 +134,9 @@
 			        });
 				}
 				this.$refs.upload.submit();
+				this.$router.push({
+					path: '/advertManager/query'
+				});
 			}
 		}
 		

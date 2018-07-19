@@ -148,7 +148,7 @@
 	import {directoryText, getDirectory} from '@/api/directory';
 	import start from '@/components/userManager/start';
 	import {phoneValidate, isEmpty} from '@/api/validate';
-
+	
 	export default {
 		data () {
 			return {
@@ -167,11 +167,11 @@
 				auditList: [
 					{
 						text: '通过审核',
-						value: '1',
+						value: '2',
 					},
 					{
 						text: '不通过审核',
-						value: '2',
+						value: '3',
 					}
 				],
 				// 消费等级

@@ -20,7 +20,6 @@ import '@/assets/style/element-ui.css'
 import '@/api/fetch'
 import {store} from '@/api/store'
 
-
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(VueLazyload)

@@ -17,16 +17,19 @@
 			element-loading-text="拼命加载中"
     		element-loading-spinner="el-icon-loading"
     		element-loading-background="rgba(0, 0, 0, 0.6)">
-	    	<el-table-column prop="advertId" label="ID" align="center"></el-table-column>
-		    <el-table-column prop="advertTitle" label="广告标题" align="center"></el-table-column>
-		    <el-table-column prop="advertType" label="广告类型" align="center"></el-table-column>
-		    <el-table-column prop="advertSize" label="广告尺寸" width="180" align="center"></el-table-column>
-		    <el-table-column prop="advertDesc" label="广告描述" align="center"></el-table-column>
-		    <el-table-column prop="advertDate" label="上传时间" align="center"></el-table-column>
+	    	<el-table-column prop="id" label="ID" align="center"></el-table-column>
+		    <el-table-column prop="name" label="广告标题" align="center"></el-table-column>
+			<el-table-column prop="type" :formatter="typeFormat" label="广告类型" align="center"></el-table-column>
+		    <el-table-column prop="advertSize" :formatter="sizeFormat" label="广告尺寸" width="180" align="center"></el-table-column>
+		    <el-table-column prop="desc" label="广告描述" align="center"></el-table-column>
+			<el-table-column prop="createDate" :formatter="dateFormat" label="上传时间" align="center"></el-table-column>
 		    <el-table-column label="操作" align="center">
 		    	<template slot-scope="scope">
 			        <span class="glyphicon glyphicon-edit btn" title="编辑" @click="editFunc(scope.row)"></span> 
-			        <span class="glyphicon glyphicon-trash btn" title="删除" @click="deleteFunc(scope.row)"></span>
+			        <span v-if="scope.row.status === 1" class="glyphicon glyphicon-log-in btn" title="加入禁用" @click="updateFunc(scope.row, 1)"></span>
+					<span v-else class="glyphicon glyphicon-log-out btn" title="解除禁用" style="color:#ddd" @click="updateFunc(scope.row, 0)"></span>
+					<br>
+					<span v-if="scope.row.status === 2" class="glyphicon glyphicon-trash btn" title="删除" @click="deleteFunc(scope.row)"></span>
 		      </template>
 		    </el-table-column>
 	  	</el-table>
@@ -38,7 +41,7 @@
 		      :current-page="currentPage"
 		      :page-size="20"
 		      layout="total, prev, pager, next, jumper"
-		      :total="400"
+		      :total="total"
 		      prev-text="上一页"
 		      next-text="下一页">
 		    </el-pagination>
@@ -97,6 +100,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+	import {getYYYYMMDD} from '@/api/common';
 	export default {
 		data () {
 			return {
@@ -104,7 +108,7 @@
 				loading: true,
 				tableData: [],
 				currentPage: 1,
-				
+				total: 0,
 				//编辑弹出框
 				editDialog: false,
 				editAdName: '',
@@ -123,34 +127,51 @@
 		created () {
 			//查询广告列表
 			let data = {
-				
+				pageNo: 1,
+				sizePerPage: 20
 			};
 			this.queryAdvert(data);
 		},
 		methods: {
+			// 格式化类型
+			typeFormat(row){
+				return row['type'] === 3 ? "图片轮换广播" : row['type']
+			},
+			// 格式化宽度高度
+			sizeFormat (row) {
+				return row["width"]+"px*"+row["height"]+"px"
+			},
+			// 格式化日期
+			dateFormat (row) {
+				return getYYYYMMDD(row['createDate']);
+			},
 			//搜索
 			searchFunc () {
 				//查询广告列表
 				let data = {
-					
+					pageNo: 1,
+					sizePerPage: 20
 				};
 				this.queryAdvert(data);
 			},
 			//查询广告列表
 			queryAdvert (dataParams) {
 				this.$ajax(this, {
-					url: '/getAdList',
+					url: '/FlightDeliveryServer/admanagement/getadlist',
 					data: dataParams
 				},
 				(result) => {
-					this.tableData = result['list'];
+					this.tableData = result['data']['adList'];
+					this.currentPage = result['data']['tablePageDto']['pageNo']
+					this.total = result['data']['tablePageDto']['total'];
 				});
 			},
 			//翻页
 			handleCurrentChange (currentPage) {
 				//查询广告列表
 				let data = {
-					
+					pageNo: currentPage,
+					sizePerPage: 20
 				};
 				this.queryAdvert(data);
 			},
@@ -193,12 +214,47 @@
 					this.queryAdvert(data);
 				});
 			},
+			// 拉入黑名单或拉出黑名单
+			updateFunc (row) {
+				let status = "";
+				if(row['status'] === 1){
+					status = 2;
+				}else{
+					status = 1;
+				}
+				this.$ajax(this, {
+					url: '/FlightDeliveryServer/admanagement/updatead ',
+					
+					data: {
+						id: row['id'],
+						status: status
+					}
+				},
+				(result) => {
+					let msg = ""
+					if(row['status'] === 1){
+						msg = "禁用成功"
+					}else{
+						msg = "解除禁用成功"
+					}
+					this.$notify({
+			          message: msg,
+			          type: 'success'
+			        });
+			        //查询广告列表
+					let data = {
+						pageNo: 1,
+						sizePerPage: 20
+					};
+					this.queryAdvert (data);
+				});
+			},
 			//删除广告
 			deleteFunc (row) {
 				this.$ajax(this, {
-					url: '/deleteAd',
+					url: '/FlightDeliveryServer/admanagement/deletead',
 					data: {
-						adId: row['advertId']
+						id: row['id']
 					}
 				},
 				(result) => {
@@ -207,7 +263,10 @@
 			          type: 'success'
 			        });
 			        //查询广告列表
-					let data = {};
+					let data = {
+						pageNo: 1,
+						sizePerPage: 20
+					};
 					this.queryAdvert (data);
 				});
 			}

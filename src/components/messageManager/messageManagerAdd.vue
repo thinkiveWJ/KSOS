@@ -153,11 +153,11 @@
 			//推送个人消息
 			pushPrivateMsg () {
 				this.$ajax(this, {
-					url: '/pushPrivateMsg',
+					url: '/FlightDeliveryServer/messagemanagement/pushprivatemsg',
 					data: {
 						title: this.pTitle,
 						type: this.pType,
-						obj: this.pObj,
+						target: this.pObj,
 						content: this.pContent
 					}
 				},
@@ -169,12 +169,12 @@
 			//推送群体消息
 			pushPublicMsg () {
 				this.$ajax(this, {
-					url: '/pushPrivateMsg',
+					url: '/FlightDeliveryServer/messagemanagement/pushpublicmsg',
 					data: {
 						title: this.pTitle,
 						type: this.gType,
-						startDate: this.gDateRang[0],
-						endDate: this.gDateRang[1],
+						startDate: new Date(this.gDateRang[0]).getTime(),
+						endDate: new Date(this.gDateRang[1]).getTime(),
 						content: this.pContent
 					}
 				},

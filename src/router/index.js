@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
 	  {
 	  	path: '/',
@@ -70,3 +70,13 @@ export default new Router({
 //  }
   ]
 })
+// 校验登录状态
+// router.beforeEach((to, from, next) => {
+// 	if(to.path != "/login"){
+// 		if (!sessionStorage.getItem('userid')){
+// 			return router.push({path: "/login"})
+// 		  }
+// 	}
+// 	next();
+//   })
+  export default router
