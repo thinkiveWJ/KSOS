@@ -15,6 +15,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/bootstrap/style/bootstrap.css'
 import '@/assets/style/base.css'
+
+import "../theme/index.css"
 import '@/assets/style/element-ui.css'
 
 import '@/api/fetch'
